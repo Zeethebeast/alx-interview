@@ -17,10 +17,9 @@ def signal_handler(sig, frame):
     Prints the total file size and count of each HTTP status code
     before exiting the program.
     """
-    print("\nSummary:")
-    print(f"Total file size: {total_file_size}")
-    for status, count in status_counts.items():
-        print(f"Status {status}: {count}")
+    print(f"File size: {total_file_size}")
+    for status in sorted(status_counts.keys()):
+        print(f"{status}: {status_counts[status]}")
     sys.exit(0)
 
 
@@ -45,6 +44,6 @@ for line in sys.stdin:
 
     # Print summary every 10 lines
     if sum(status_counts.values()) % 10 == 0:
-        print(f"Total file size: {total_file_size}")
-        for status, count in status_counts.items():
-            print(f"Status {status}: {count}")
+        print(f"File size: {total_file_size}")
+        for status in sorted(status_counts.keys()):
+            print(f"{status}: {status_counts[status]}")
