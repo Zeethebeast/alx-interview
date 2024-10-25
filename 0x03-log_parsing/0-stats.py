@@ -2,7 +2,10 @@
 import sys
 import signal
 import re
-
+'''
+Write a script that reads stdin
+line by line and computes metrics
+'''
 # Initialize variables
 status_counts = {}
 total_file_size = 0
