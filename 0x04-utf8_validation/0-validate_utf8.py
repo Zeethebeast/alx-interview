@@ -6,29 +6,27 @@ Each integer represents a byte (0-255).
 """
 
 def validUTF8(data):
-    num_byte = 0  # Number of continuation bytes expected
+    num_byte = 0
+    mask1 = 1 << 7  # 10000000
+    mask2 = 1 << 6  # 01000000
 
     for byte in data:
-        # Ensure byte is within valid range (0-255)
-        if byte < 0 or byte > 255:
-            return False
-
-        # If no continuation bytes are expected, determine the type of byte
         if num_byte == 0:
-            # Determine the number of bytes in this UTF-8 character
-            if byte >> 5 == 0b110:  # 2-byte character
-                num_byte = 1
-            elif byte >> 4 == 0b1110:  # 3-byte character
-                num_byte = 2
-            elif byte >> 3 == 0b11110:  # 4-byte character
-                num_byte = 3
-            elif byte >> 7:  # If top bit is 1 but it's not a valid lead byte
+            mask = 1 << 7
+            while mask & byte:
+                num_byte += 1
+                mask >>= 1
+
+            if num_byte == 0:
+                continue
+
+            if num_byte == 1 or num_byte > 4:
                 return False
         else:
-            # Check that continuation bytes start with '10'
-            if byte >> 6 != 0b10:
+            # Check if the byte starts with '10' in binary form
+            if not (byte & mask1 and not (byte & mask2)):
                 return False
-            num_byte -= 1
 
-    # If there are any expected continuation bytes left, it's an invalid encoding
+        num_byte -= 1
+
     return num_byte == 0
