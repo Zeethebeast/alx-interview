@@ -11,6 +11,10 @@ def validUTF8(data):
     mask2 = 1 << 6  # 01000000
 
     for byte in data:
+        # Check if byte is outside the valid range (0-255)
+        if byte < 0 or byte > 255:
+            return False
+
         if num_byte == 0:
             mask = 1 << 7
             while mask & byte:
